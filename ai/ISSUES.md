@@ -1,6 +1,6 @@
 # Issues
 
-Acest proiect folosește [GitHub Issues](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/issues) pentru a urmări munca.
+Acest proiect folosește [GitHub Issues](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/issues) pentru a urmări munca.
 
 ## Regulă
 
@@ -19,7 +19,7 @@ Excepții:
 
 ## Issue-uri deschise
 
-Vezi [toate issue-urile](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/issues).
+Vezi [toate issue-urile](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/issues).
 
 ## Common issues
 
@@ -34,4 +34,4 @@ Vezi [toate issue-urile](https://github.com/peviitor-scrapers/aqua-flow-construc
 ## Escalation
 
 For peviitor API problems, contact the peviitor maintainers with the CIF
-`22245958` and the failing endpoint.
+`13390452` and the failing endpoint.

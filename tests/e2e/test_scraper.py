@@ -1,4 +1,4 @@
-"""End-to-end test: live ANOFM scrape for AQUA FLOW CONSTRUCT S.R.L.
+"""End-to-end test: live ANOFM scrape for NETPRO SRL
 
 Skips (rather than fails) when ANOFM is unreachable, so CI does not break on
 transient network issues.

@@ -4,7 +4,7 @@ Instructions for AI agents working in this repository.
 
 ## Project
 
-Python scraper that reads job listings for AQUA FLOW CONSTRUCT S.R.L. (CIF `22245958`)
+Python scraper that reads job listings for NETPRO SRL (CIF `13390452`)
 from ANOFM (`https://mediere.anofm.ro`) and publishes them to peviitor.ro
 through the **v1 API** (`https://api.peviitor.ro/v1`). The company has no
 own careers board, so ANOFM is the only job source. It is derived from the
@@ -36,7 +36,7 @@ workflow run (`gh run view ...`) from a different CWD, it returns 404 and
 the loop hangs forever. Always pass `--repo` explicitly:
 
 ```bash
-gh run view <RUN_ID> --repo peviitor-scrapers/aqua-flow-construct-python-scraper --json status -q .status
+gh run view <RUN_ID> --repo peviitor-scrapers/netpro-srl-python-scraper --json status -q .status
 ```
 
 If a background task is stuck, kill it immediately instead of letting it
@@ -72,7 +72,7 @@ module, file an issue and sync the fix back to the source template.
 ## Maintenance
 
 On every session: check open GitHub issues
-(`gh issue list --repo peviitor-scrapers/aqua-flow-construct-python-scraper --state open`),
+(`gh issue list --repo peviitor-scrapers/netpro-srl-python-scraper --state open`),
 prioritize `critical` → `bug` → `enhancement` → `documentation`, and fix
 them — commit with the issue reference and close the issue.
 
@@ -82,7 +82,7 @@ them — commit with the issue reference and close the issue.
 python3 -m pytest tests/unit tests/consistency   # fast tests (no network)
 python3 -m pytest tests/e2e                      # live ANOFM scrape
 python3 -m scraper.index                         # full scrape + publish
-python3 -m scraper.validate_jobs 22245958 --mode head  # validate job URLs
+python3 -m scraper.validate_jobs 13390452 --mode head  # validate job URLs
 ```
 
 ## Key files

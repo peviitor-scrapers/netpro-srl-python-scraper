@@ -12,8 +12,8 @@ from scraper import anaf
 from scraper.api import API_BASE_URL
 from scraper.config import company_config
 
-COMPANY_CIF = company_config["id"]  # 8-digit Peviitor id: 22245958
-ANAF_CIF = company_config.get("cui") or str(int(COMPANY_CIF))  # raw CUI: 22245958
+COMPANY_CIF = company_config["id"]  # 8-digit Peviitor id: 13390452
+ANAF_CIF = company_config.get("cui") or str(int(COMPANY_CIF))  # raw CUI: 13390452
 COMPANY_NAME = company_config["company"]
 
 

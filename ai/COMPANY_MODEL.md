@@ -38,16 +38,16 @@ config when available.
 
 ```json
 {
-  "id": "22245958",
-  "company": "AQUA FLOW CONSTRUCT S.R.L.",
-  "brand": "Aqua Flow Construct",
+  "id": "13390452",
+  "company": "NETPRO SRL",
+  "brand": "Netpro",
   "status": "activ",
-  "location": ["Bistrita"],
+  "location": ["Oradea"],
   "website": [],
   "career": ["https://mediere.anofm.ro/app/module/mediere/jobs"],
-  "scraperFile": "https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/job-seeker-ro-spider.yml"
+  "scraperFile": "https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/job-seeker-ro-spider.yml"
 }
 ```
 
-`website` is empty because AQUA FLOW CONSTRUCT S.R.L. has no public website; `career`
+`website` is empty because NETPRO SRL has no public website; `career`
 points to the ANOFM jobs page, the only source of its job postings.

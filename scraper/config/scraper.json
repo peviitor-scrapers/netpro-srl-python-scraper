@@ -1,5 +1,8 @@
 {
   "apiBase": "https://api.peviitor.ro/v1",
   "apiPath": "/scraper/jobs/",
-  "jobDetailsPrefix": "https://mediere.anofm.ro/app/module/mediere/job/"
+  "jobDetailsPrefix": "https://mediere.anofm.ro/app/module/mediere/job/",
+  "empregoQuery": "Netpro",
+  "cautaCompanySlug": "13390452-netpro-srl",
+  "jobradar24JobUrls": []
 }

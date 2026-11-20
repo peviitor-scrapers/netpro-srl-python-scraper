@@ -1,1 +1,1 @@
-"""AQUA FLOW CONSTRUCT S.R.L. Python scraper package."""
+"""NETPRO SRL Python scraper package."""

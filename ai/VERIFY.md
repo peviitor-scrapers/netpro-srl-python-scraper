@@ -27,10 +27,10 @@ suite.
 ## Live — company
 
 ```bash
-python3 -c "from scraper.anaf import get_company_from_anaf; print(get_company_from_anaf('22245958'))"
+python3 -c "from scraper.anaf import get_company_from_anaf; print(get_company_from_anaf('13390452'))"
 ```
 
-Expect: `denumire == "AQUA FLOW CONSTRUCT S.R.L."`, `cif == "22245958"`.
+Expect: `denumire == "NETPRO SRL"`, `cif == "13390452"`.
 
 ## Live — ANOFM
 
@@ -43,10 +43,10 @@ Expect: `>= 1` jobs scraped from ANOFM, unique URLs, titles present.
 ## Live — peviitor SOLR
 
 ```bash
-curl "https://api.peviitor.ro/v1/scraper/jobs/?cif=22245958&rows=500"
+curl "https://api.peviitor.ro/v1/scraper/jobs/?cif=13390452&rows=500"
 ```
 
-Expect: `success: true`. Note CIF `22245958` is shared with other peviitor
+Expect: `success: true`. Note CIF `13390452` is shared with other peviitor
 scrapers (jobviewtrack, ejobs, olx, multijobs, targuldecariere), so the
 total count includes their jobs; confirm the scraped ANOFM job URLs are present.
 
@@ -66,11 +66,11 @@ Then check:
 ## GitHub Pages
 
 ```bash
-gh api repos/peviitor-scrapers/aqua-flow-construct-python-scraper/pages --jq .html_url
-curl -s -o /dev/null -w "%{http_code}\n" https://peviitor-scrapers.github.io/aqua-flow-construct-python-scraper/
+gh api repos/peviitor-scrapers/netpro-srl-python-scraper/pages --jq .html_url
+curl -s -o /dev/null -w "%{http_code}\n" https://peviitor-scrapers.github.io/netpro-srl-python-scraper/
 ```
 
-Expect: `https://peviitor-scrapers.github.io/aqua-flow-construct-python-scraper/` and HTTP `200`.
+Expect: `https://peviitor-scrapers.github.io/netpro-srl-python-scraper/` and HTTP `200`.
 The site is built from `docs/` on `main` (source: branch `main`, path `/docs`).
 
 ## GitHub Actions
@@ -85,7 +85,7 @@ For each workflow in `.github/workflows/`, run it from **Actions** → *Run work
 After a successful run, verify via API that the company jobs appear:
 
 ```bash
-curl -s "https://api.peviitor.ro/v1/scraper/jobs/?cif=22245958&rows=500"
+curl -s "https://api.peviitor.ro/v1/scraper/jobs/?cif=13390452&rows=500"
 ```
 
-Check `docs/jobs.md` was regenerated and jobs are visible on https://peviitor.ro (CIF `22245958`).
+Check `docs/jobs.md` was regenerated and jobs are visible on https://peviitor.ro (CIF `13390452`).

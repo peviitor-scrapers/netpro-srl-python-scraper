@@ -1,4 +1,4 @@
-# AQUA FLOW CONSTRUCT S.R.L. — GitHub Pages
+# NETPRO SRL — GitHub Pages
 
 This folder is published by GitHub Pages. It shows the company's current
 openings, read live from the peviitor API, plus the CI test reports.

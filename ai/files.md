@@ -81,7 +81,7 @@
 ## Notes
 
 - All operations go through the peviitor v1 API — no direct Solr access.
-- CIF `22245958` is shared with other peviitor scrapers; stale-deletion is
+- CIF `13390452` is shared with other peviitor scrapers; stale-deletion is
   scoped to the ANOFM job prefix only.
 - `.env` is ignored and not used by the current code (all API access goes
   through `api.peviitor.ro`).

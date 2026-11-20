@@ -5,7 +5,7 @@
 Before any work, check open issues and fix them:
 
 ```bash
-gh issue list --repo peviitor-scrapers/aqua-flow-construct-python-scraper --state open
+gh issue list --repo peviitor-scrapers/netpro-srl-python-scraper --state open
 ```
 
 Prioritize `critical` → `bug` → `enhancement` → `documentation`. For each
@@ -24,8 +24,8 @@ appropriate, and move on.
 - Validate job URLs periodically:
 
 ```bash
-python3 -m scraper.validate_jobs 22245958 --mode content --dry-run
-python3 -m scraper.validate_jobs 22245958 --mode content --delete
+python3 -m scraper.validate_jobs 13390452 --mode content --dry-run
+python3 -m scraper.validate_jobs 13390452 --mode content --delete
 ```
 
 ## ANOFM response changes
@@ -35,7 +35,7 @@ If `search_anofm` returns 0 or few jobs, inspect the API response:
 ```bash
 curl -s -X POST "https://mediere.anofm.ro/api/entity/vw_public_job_posting" \
   -H "Content-Type: application/json" \
-  -d '{"current":1,"rowCount":250,"sort":{"created_at":"desc"},"employer_tax_code":"22245958"}'
+  -d '{"current":1,"rowCount":250,"sort":{"created_at":"desc"},"employer_tax_code":"13390452"}'
 ```
 
 Adjust `search_anofm` in `scraper/anaf.py` and the expected count in

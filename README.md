@@ -1,34 +1,35 @@
-[![Oportunitati si Cariere](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/job-seeker-ro-spider.yml/badge.svg)](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/job-seeker-ro-spider.yml)
-[![Automation Tests](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/automation-testing.yml/badge.svg)](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/automation-testing.yml)
+[![Oportunitati si Cariere](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/job-seeker-ro-spider.yml/badge.svg)](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/job-seeker-ro-spider.yml)
+[![Automation Tests](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/automation-testing.yml/badge.svg)](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/automation-testing.yml)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fpeviitor.ro&label=peviitor.ro)](https://peviitor.ro)
 [![API](https://img.shields.io/website?url=https%3A%2F%2Fapi.peviitor.ro%2F&label=api.peviitor.ro)](https://api.peviitor.ro/)
-[![GitHub Pages](https://img.shields.io/github/deployments/peviitor-scrapers/aqua-flow-construct-python-scraper/github-pages?label=GitHub%20Pages)](https://peviitor-scrapers.github.io/aqua-flow-construct-python-scraper/)
+[![GitHub Pages](https://img.shields.io/github/deployments/peviitor-scrapers/netpro-srl-python-scraper/github-pages?label=GitHub%20Pages)](https://peviitor-scrapers.github.io/netpro-srl-python-scraper/)
 
-# job_seeker_ro_spider — AQUA FLOW CONSTRUCT S.R.L. Scraper
+# job_seeker_ro_spider — NETPRO SRL Scraper
 
-**job_seeker_ro_spider** — a scraper for AQUA FLOW CONSTRUCT S.R.L. jobs in Romania
-(CUI `22245958`, Bistrita). It collects the active postings published on
+**job_seeker_ro_spider** — a scraper for NETPRO SRL jobs in Romania
+(CUI `13390452`, Oradea). It collects the active postings published on
 [ANOFM](https://mediere.anofm.ro/app/module/mediere/jobs),
 [jobRapid](https://www.jobrapid.ro/), [BeBee](https://bebee.com/),
-[Jobica](https://jobica.ro/), [Cauta.ro](https://cauta.ro/) and
-[JobRadar24](https://www.jobradar24.ro/), then publishes them to
+[Jobica](https://jobica.ro/), [Emprego](https://emprego.com/),
+[Cauta.ro](https://cauta.ro/) and [JobRadar24](https://www.jobradar24.ro/),
+then publishes them to
 [peviitor.ro](https://peviitor.ro) through the Peviitor API.
 
-ANOFM is the authoritative source (`employer_tax_code=22245958`). The portals
+ANOFM is the authoritative source (`employer_tax_code=13390452`). The portals
 republish the same offer on their own detail pages; because peviitor.ro
 identifies jobs by unique URL, each distinct URL is published as a distinct job.
 JobRadar24 omits the employer name in JSON-LD, so its company is verified from
-the page text. Ziarul Muncii, Careerjet and Jooble have no own job-detail URLs.
+the page text.
 
 > **🌱 Derived scraper.** This repository is derived from
 > [palas-international-resort-python-scraper](https://github.com/peviitor-scrapers/palas-international-resort-python-scraper).
 
 ## Overview
 
-The project automates the daily collection of AQUA FLOW CONSTRUCT S.R.L. jobs in
+The project automates the daily collection of NETPRO SRL jobs in
 Romania, keeping the peviitor.ro board up to date with the latest opportunities.
 
 ## Features
@@ -38,7 +39,7 @@ Romania, keeping the peviitor.ro board up to date with the latest opportunities.
 - Derives BeBee and Jobica detail URLs from ANOFM ids, maps the Cauta.ro
   company profile and follows the discovered JobRadar24 detail URLs; the
   hiring organization is verified on every page
-- Deduplicates by URL across all six sources; distinct URLs remain distinct jobs
+- Deduplicates by URL across all seven sources; distinct URLs remain distinct jobs
 - Publishes enriched non-personal fields: location, salary, date and expiry date
 - Never stores job descriptions, contact names, emails or phone numbers (GDPR data minimization)
 - Validates the company via CUIScan (legal name and address, by CIF) and CUIFirma (brand search)

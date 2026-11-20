@@ -57,7 +57,7 @@ def test_workflow_naming():
 
 def test_repo_identity_in_readme():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "aqua-flow-construct-python-scraper" in readme.lower()
+    assert "netpro-srl-python-scraper" in readme.lower()
     assert "peviitor" in readme.lower()
 
 

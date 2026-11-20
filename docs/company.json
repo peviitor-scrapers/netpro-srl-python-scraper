@@ -1,15 +1,15 @@
 {
-  "id": "22245958",
-  "cui": "22245958",
-  "company": "AQUA FLOW CONSTRUCT S.R.L.",
-  "brand": "Aqua Flow Construct",
+  "id": "13390452",
+  "cui": "13390452",
+  "company": "NETPRO SRL",
+  "brand": "Netpro",
   "status": "activ",
   "location": [
-    "Bistrita"
+    "Oradea"
   ],
   "website": [],
   "career": [
     "https://mediere.anofm.ro/app/module/mediere/jobs"
   ],
-  "scraperFile": "https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/job-seeker-ro-spider.yml"
+  "scraperFile": "https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/job-seeker-ro-spider.yml"
 }

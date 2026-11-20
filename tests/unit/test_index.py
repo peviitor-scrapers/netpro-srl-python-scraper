@@ -6,24 +6,24 @@ from scraper import index
 
 
 def test_map_to_job_model_adds_company_and_status():
-    index.COMPANY_NAME = "AQUA FLOW CONSTRUCT S.R.L."
+    index.COMPANY_NAME = "NETPRO SRL"
     raw = {
         "url": "https://mediere.anofm.ro/app/module/mediere/job/1",
         "title": "Lucrător comercial",
-        "location": ["Bistrita"],
+        "location": ["Oradea"],
     }
-    job = index.map_to_job_model(raw, "22245958")
-    assert job["company"] == "AQUA FLOW CONSTRUCT S.R.L."
-    assert job["cif"] == "22245958"
+    job = index.map_to_job_model(raw, "13390452")
+    assert job["company"] == "NETPRO SRL"
+    assert job["cif"] == "13390452"
     assert job["status"] == "scraped"
-    assert job["location"] == ["Bistrita"]
+    assert job["location"] == ["Oradea"]
     assert job["date"]
 
 
 def test_map_to_job_model_without_location():
     raw = {"url": "https://mediere.anofm.ro/app/module/mediere/job/2",
            "title": "Vânzător"}
-    job = index.map_to_job_model(raw, "22245958", company_name="AQUA FLOW CONSTRUCT S.R.L.")
+    job = index.map_to_job_model(raw, "13390452", company_name="NETPRO SRL")
     assert "location" not in job
 
 
@@ -36,7 +36,7 @@ def test_map_to_job_model_keeps_optional_fields():
         "workmode": "on-site",
         "expirationdate": "2027-01-31",
     }
-    job = index.map_to_job_model(raw, "22245958", company_name="AQUA FLOW CONSTRUCT S.R.L.")
+    job = index.map_to_job_model(raw, "13390452", company_name="NETPRO SRL")
     assert job["salary"] == "4000-5000 RON"
     assert job["tags"] == ["sudor", "cu-norma-intreaga"]
     assert job["workmode"] == "on-site"
@@ -45,20 +45,20 @@ def test_map_to_job_model_keeps_optional_fields():
 
 def test_transform_jobs_for_solr_uppercases_company():
     jobs = [{"url": "https://x/job", "title": "Test", "location": ["Cluj-Napoca"]}]
-    transformed = index.transform_jobs_for_solr({"company": "AQUA FLOW CONSTRUCT S.R.L.", "jobs": jobs})
-    assert transformed["company"] == "AQUA FLOW CONSTRUCT S.R.L."
+    transformed = index.transform_jobs_for_solr({"company": "NETPRO SRL", "jobs": jobs})
+    assert transformed["company"] == "NETPRO SRL"
     assert transformed["jobs"][0]["location"] == ["Cluj-Napoca"]
 
 
 def test_transform_jobs_for_solr_location_fallback():
     jobs = [{"url": "https://x/job", "title": "Test", "location": []}]
-    transformed = index.transform_jobs_for_solr({"company": "AQUA FLOW CONSTRUCT S.R.L.", "jobs": jobs})
+    transformed = index.transform_jobs_for_solr({"company": "NETPRO SRL", "jobs": jobs})
     assert transformed["jobs"][0]["location"] == ["România"]
 
 
 def test_transform_jobs_for_solr_missing_location_fallback():
     jobs = [{"url": "https://x/job", "title": "Test"}]
-    transformed = index.transform_jobs_for_solr({"company": "AQUA FLOW CONSTRUCT S.R.L.", "jobs": jobs})
+    transformed = index.transform_jobs_for_solr({"company": "NETPRO SRL", "jobs": jobs})
     assert transformed["jobs"][0]["location"] == ["România"]
 
 
@@ -68,7 +68,7 @@ def _stub_main(monkeypatch, tmp_path, raw_jobs):
     monkeypatch.setattr(index, "delete_job_by_url", lambda url: None)
     monkeypatch.setattr(index, "upsert_company", lambda cfg: None)
     monkeypatch.setattr(index, "validate_and_get_company", lambda: {
-        "company": "AQUA FLOW CONSTRUCT S.R.L.", "cif": "22245958", "address": "BISTRITA"})
+        "company": "NETPRO SRL", "cif": "13390452", "address": "ORADEA"})
     monkeypatch.setattr(index, "search_anofm_jobs", lambda cif: raw_jobs)
     monkeypatch.setattr(index, "search_jobrapid", lambda company: [])
     monkeypatch.setattr(index, "search_jsonld_mirrors", lambda jobs, company: [])
@@ -81,7 +81,7 @@ def _stub_main(monkeypatch, tmp_path, raw_jobs):
 def test_main_writes_summary(tmp_path, monkeypatch):
     fake_jobs = [
         {"url": f"https://mediere.anofm.ro/app/module/mediere/job/{i}",
-         "title": f"Job {i}", "location": ["Bistrita"]}
+         "title": f"Job {i}", "location": ["Oradea"]}
         for i in range(3)
     ]
     root = _stub_main(monkeypatch, tmp_path, fake_jobs)
@@ -92,7 +92,7 @@ def test_main_writes_summary(tmp_path, monkeypatch):
     assert out.exists()
     data = json.loads(out.read_text(encoding="utf-8"))
     assert len(data["jobs"]) == 3
-    assert data["company"] == "AQUA FLOW CONSTRUCT S.R.L."
+    assert data["company"] == "NETPRO SRL"
     assert (tmp_path / "docs" / "jobs.md").exists()
 
 
@@ -153,9 +153,9 @@ def test_drop_dead_urls_drops_soft_404(monkeypatch):
 def _anofm_row(job_id=1, **overrides):
     row = {
         "id": job_id,
-        "employer_tax_code": "22245958",
+        "employer_tax_code": "13390452",
         "occupation": "SUDOR",
-        "address_locality_name": "Bistrita > MUNICIPIUL POROSCHIA > POROSCHIA",
+        "address_locality_name": "Oradea > MUNICIPIUL POROSCHIA > POROSCHIA",
         "minimum_salary": "4000.00",
         "maximum_salary": "5000.00",
         "work_regime_name": "Sediu",
@@ -176,7 +176,7 @@ def test_search_anofm_jobs_maps_non_personal_fields(mock_post):
     mock_post.return_value.status_code = 200
     mock_post.return_value.json.return_value = {"rows": [_anofm_row()]}
 
-    jobs = index.search_anofm_jobs("22245958")
+    jobs = index.search_anofm_jobs("13390452")
 
     assert len(jobs) == 1
     job = jobs[0]
@@ -195,10 +195,10 @@ def test_search_anofm_jobs_sends_cif_filter(mock_post):
     mock_post.return_value.status_code = 200
     mock_post.return_value.json.return_value = {"rows": []}
 
-    index.search_anofm_jobs("22245958")
+    index.search_anofm_jobs("13390452")
 
     payload = mock_post.call_args.kwargs["json"]
-    assert payload["employer_tax_code"] == "22245958"
+    assert payload["employer_tax_code"] == "13390452"
     assert payload["current"] == 1
     assert payload["rowCount"] == 250
     assert payload["sort"] == {"created_at": "desc"}
@@ -210,7 +210,7 @@ def test_search_anofm_jobs_dedupes_and_filters_wrong_cif(mock_post):
         _anofm_row(1), _anofm_row(1), _anofm_row(2, employer_tax_code="99999999"),
     ]}
 
-    jobs = index.search_anofm_jobs("22245958")
+    jobs = index.search_anofm_jobs("13390452")
 
     assert [job["url"].rsplit("/", 1)[-1] for job in jobs] == ["1"]
 
@@ -223,7 +223,7 @@ def test_search_anofm_jobs_skips_expired_and_placeholders(mock_post):
         _anofm_row(3),
     ]}
 
-    jobs = index.search_anofm_jobs("22245958")
+    jobs = index.search_anofm_jobs("13390452")
 
     assert len(jobs) == 1
     assert jobs[0]["url"].endswith("/3")
@@ -231,12 +231,12 @@ def test_search_anofm_jobs_skips_expired_and_placeholders(mock_post):
 
 def test_search_anofm_jobs_empty_on_http_error(mock_post):
     mock_post.return_value.status_code = 503
-    assert index.search_anofm_jobs("22245958") == []
+    assert index.search_anofm_jobs("13390452") == []
 
 
 def test_search_anofm_jobs_empty_on_network_error(mock_post):
     mock_post.side_effect = RuntimeError("network")
-    assert index.search_anofm_jobs("22245958") == []
+    assert index.search_anofm_jobs("13390452") == []
 
 
 def test_salary_variants():
@@ -246,7 +246,7 @@ def test_salary_variants():
 
 
 def test_anofm_cif_strips_peviitor_padding():
-    assert index._anofm_cif("22245958") == "22245958"
+    assert index._anofm_cif("13390452") == "13390452"
     assert index._anofm_cif("41873878") == "41873878"
 
 
@@ -279,14 +279,14 @@ def test_parse_jobrapid_posting_extracts_fields():
         "title": "Sudor",
         "datePosted": "2026-11-13T14:36:03+02:00",
         "baseSalary": {"currency": "RON", "value": {"minValue": 4000, "maxValue": 5000}},
-        "jobLocation": {"address": {"addressLocality": "Bistrita", "addressRegion": "Ilfov"}},
+        "jobLocation": {"address": {"addressLocality": "Oradea", "addressRegion": "Ilfov"}},
     }
     page = f'<script type="application/ld+json">{json.dumps(posting)}</script>'
     job = index.parse_jobrapid_posting(page, "https://www.jobrapid.ro/fallback")
 
     assert job["url"].endswith("1732973.html")
     assert job["title"] == "Sudor"
-    assert job["location"] == ["Bistrita"]
+    assert job["location"] == ["Oradea"]
     assert job["salary"] == "4000-5000 RON"
     assert job["date"] == "2026-11-13T12:36:03Z"
 
@@ -297,7 +297,7 @@ def test_search_jobrapid_filters_by_company_and_fetches_details(mock_post, mock_
                 f'data-company="{company}" data-href="{href}"></div>')
 
     mock_post.return_value.text = (
-        card("Aqua Flow Construct SRL", "/locuri-de-munca/a.html")
+        card("Netpro SRL", "/locuri-de-munca/a.html")
         + card("Other Firm SRL", "/locuri-de-munca/b.html")
     )
     posting = {
@@ -307,7 +307,7 @@ def test_search_jobrapid_filters_by_company_and_fetches_details(mock_post, mock_
     }
     mock_get.return_value.text = f'<script type="application/ld+json">{json.dumps(posting)}</script>'
 
-    jobs = index.search_jobrapid("Aqua Flow Construct")
+    jobs = index.search_jobrapid("Netpro")
 
     assert len(jobs) == 1
     assert jobs[0]["url"].endswith("/a.html")
@@ -347,15 +347,15 @@ def test_parse_jsonld_posting_supports_graph_and_employer_check():
         "datePosted": "2026-11-09",
         "validThrough": "2026-12-15",
         "baseSalary": {"currency": "RON", "value": {"minValue": 5000, "maxValue": 5000}},
-        "jobLocation": {"address": {"addressLocality": "Bistrita", "addressCountry": "RO"}},
-        "hiringOrganization": {"@type": "Organization", "name": "AQUA FLOW CONSTRUCT S.R.L."},
+        "jobLocation": {"address": {"addressLocality": "Oradea", "addressCountry": "RO"}},
+        "hiringOrganization": {"@type": "Organization", "name": "NETPRO SRL"},
     }
     url = "https://www.jobradar24.ro/anunt/muncitor-necalificat-la-demolarea-cladirilor-captuseli-zidarie-placi-mozaic-faianta-gresie-parchet-er89qk"
-    job = index.parse_jsonld_posting(_ldjson_page(posting, graph=True), url, "AQUA FLOW CONSTRUCT S.R.L.")
+    job = index.parse_jsonld_posting(_ldjson_page(posting, graph=True), url, "NETPRO SRL")
 
     assert job["url"] == url
     assert job["title"] == "Pricing & Sales Support Specialist"
-    assert job["location"] == ["Bistrita"]
+    assert job["location"] == ["Oradea"]
     assert job["salary"] == "5000 RON"
     assert job["date"] == "2026-11-09T00:00:00Z"
     assert job["expirationdate"] == "2026-12-15"
@@ -370,15 +370,15 @@ def test_search_jsonld_mirrors_builds_derived_urls_and_dedupes(mock_get):
         "location": ["TIHA BARGAULUI"],
     }]
     bebee = ("https://bebee.com/ro/jobs/agent-de-vanzari-"
-             "aqua-flow-construct-srl-tiha-bargaului--techmap_ro_3448503")
-    jobica = "https://jobica.ro/job/agent-de-vanzari-tiha-bargaului-anofm-3448503"
+             "netpro-srl-oradea--techmap_ro_3448503")
+    jobica = "https://jobica.ro/job/agent-de-vanzari-oradea-anofm-3448503"
     emprego = ("https://emprego.com/jobs/agent-de-vanzari-"
                "a3e6d0b4-539a-4bb3-9b42-7b774e06d092")
 
     def posting(url):
         return {
             "@type": "JobPosting", "url": url, "title": "Agent de vânzari",
-            "hiringOrganization": {"name": "AQUA FLOW CONSTRUCT S.R.L."},
+            "hiringOrganization": {"name": "NETPRO SRL"},
         }
 
     class _Response:
@@ -397,7 +397,7 @@ def test_search_jsonld_mirrors_builds_derived_urls_and_dedupes(mock_get):
 
     mock_get.side_effect = fake_get
 
-    jobs = index.search_jsonld_mirrors(anofm, "AQUA FLOW CONSTRUCT S.R.L.")
+    jobs = index.search_jsonld_mirrors(anofm, "NETPRO SRL")
 
     assert len(jobs) == 3
     assert {job["url"] for job in jobs} == {bebee, jobica, emprego}
@@ -407,10 +407,10 @@ def test_search_cauta_jobs_maps_anofm_mirrors(mock_get):
     anofm = [{
         "url": "https://mediere.anofm.ro/app/module/mediere/job/3448503",
         "title": "AGENT DE VÂNZARI",
-        "location": ["Bistrita"],
+        "location": ["Oradea"],
         "salary": "5000 RON",
     }]
-    href = "/locuri-de-munca/anunt/agent-de-vanzari-bistrita-alba-3448503"
+    href = "/locuri-de-munca/anunt/agent-de-vanzari-oradea-alba-3448503"
     url = index.CAUTA_BASE_URL + href
 
     class _Response:
@@ -424,12 +424,12 @@ def test_search_cauta_jobs_maps_anofm_mirrors(mock_get):
         if url_ == index.CAUTA_COMPANY_URL:
             return _Response('<a href="' + href + '">Job</a>')
         if url_ == url:
-            return _Response('<h1>Agent de vânzări</h1><p>AQUA FLOW CONSTRUCT S.R.L.</p>')
+            return _Response('<h1>Agent de vânzări</h1><p>NETPRO SRL</p>')
         return _Response("")
 
     mock_get.side_effect = fake_get
 
-    jobs = index.search_cauta_jobs(anofm, "AQUA FLOW CONSTRUCT S.R.L.")
+    jobs = index.search_cauta_jobs(anofm, "NETPRO SRL")
 
     assert len(jobs) == 1
     assert jobs[0]["url"] == url
@@ -444,24 +444,25 @@ def test_parse_jobradar_posting_verifies_company_in_page_text():
         "validThrough": "2026-12-18T00:00:00.000000Z",
         "hiringOrganization": {"@id": "https://www.jobradar24.ro/#/schema/Organization/agency"},
     }
-    page = "<h1>Femeie De Serviciu</h1><p>Aqua Flow Construct S.r.l.</p>" + _ldjson_page(posting)
-    url = index.JOBRADAR24_JOB_URLS[0]
-    job = index.parse_jobradar_posting(page, url, "AQUA FLOW CONSTRUCT S.R.L.")
+    page = "<h1>Femeie De Serviciu</h1><p>Netpro SRL</p>" + _ldjson_page(posting)
+    url = "https://www.jobradar24.ro/anunt/netpro-test"
+    job = index.parse_jobradar_posting(page, url, "NETPRO SRL")
     assert job["url"] == url
     assert job["title"] == "Femeie De Serviciu"
-    assert job["location"] == ["Bistrita"]
+    assert job["location"] == ["Oradea"]
     assert job["expirationdate"] == "2026-12-18"
     assert index.parse_jobradar_posting(page, url, "ALTA FIRMA SRL") is None
 
 
 def test_search_jobradar24_jobs_skips_stale_posting(monkeypatch):
     stale = {"@type": "JobPosting", "title": "Femeie De Serviciu", "validThrough": "2020-01-01"}
-    page = "<p>Aqua Flow Construct S.r.l.</p>" + _ldjson_page(stale)
+    page = "<p>Netpro SRL</p>" + _ldjson_page(stale)
     response = type("R", (), {"text": page, "status_code": 200,
                               "raise_for_status": lambda self: None,
                               "encoding": "utf-8"})()
     monkeypatch.setattr(index.requests, "get", lambda *a, **k: response)
+    monkeypatch.setattr(index, "JOBRADAR24_JOB_URLS", ("https://www.jobradar24.ro/anunt/netpro-test",))
     # A stale posting is still returned here; the shared live-URL validator and
     # the expiry field are handled by the publisher.
-    jobs = index.search_jobradar24_jobs("AQUA FLOW CONSTRUCT S.R.L.")
+    jobs = index.search_jobradar24_jobs("NETPRO SRL")
     assert [job["url"] for job in jobs] == list(index.JOBRADAR24_JOB_URLS)

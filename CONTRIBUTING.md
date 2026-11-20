@@ -3,8 +3,8 @@
 ## Getting started
 
 ```bash
-git clone git@github.com:peviitor-scrapers/aqua-flow-construct-python-scraper.git
-cd aqua-flow-construct-python-scraper
+git clone git@github.com:peviitor-scrapers/netpro-srl-python-scraper.git
+cd netpro-srl-python-scraper
 python3 -m venv .venv && source .venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
@@ -13,7 +13,7 @@ python3 -m pip install -r requirements.txt
 
 Every code change must have a corresponding GitHub issue — see
 [`ai/ISSUES.md`](ai/ISSUES.md). Open issues at
-[peviitor-scrapers/aqua-flow-construct-python-scraper/issues](https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/issues).
+[peviitor-scrapers/netpro-srl-python-scraper/issues](https://github.com/peviitor-scrapers/netpro-srl-python-scraper/issues).
 
 ### Bug report structure
 

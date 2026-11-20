@@ -9,50 +9,50 @@ from scraper import anaf
 
 def test_get_company_from_anaf_cuiscan_only(mock_get):
     mock_get.return_value = mock.Mock(json=lambda: {
-        "denumire": "AQUA FLOW CONSTRUCT S.R.L.", "cui": "22245958",
+        "denumire": "NETPRO SRL", "cui": "13390452",
         "adresa": "CLUJ-NAPOCA", "activ": True})
-    company = anaf.get_company_from_anaf("22245958")
+    company = anaf.get_company_from_anaf("13390452")
     assert mock_get.call_count == 1
     assert "cuiscan.ro" in mock_get.call_args.args[0]
-    assert company["denumire"] == "AQUA FLOW CONSTRUCT S.R.L."
-    assert company["cif"] == "22245958"
+    assert company["denumire"] == "NETPRO SRL"
+    assert company["cif"] == "13390452"
     assert "stareInregistrare" not in company
 
 
 def test_get_company_from_anaf_returns_none_on_network_failure(mock_get):
     mock_get.side_effect = Exception("network")
-    assert anaf.get_company_from_anaf("22245958") is None
+    assert anaf.get_company_from_anaf("13390452") is None
 
 
 def test_get_company_from_anaf_no_data_is_fatal(mock_get):
     mock_get.return_value = mock.Mock(json=lambda: {})
     with pytest.raises(RuntimeError, match="no data"):
-        anaf.get_company_from_anaf_with_fallback("22245958", cached={"22245958": {"denumire": "cached"}})
+        anaf.get_company_from_anaf_with_fallback("13390452", cached={"13390452": {"denumire": "cached"}})
 
 
 def test_get_company_from_anaf_with_fallback_uses_cache_on_network_failure(mock_get):
     mock_get.side_effect = Exception("network")
-    cached = {"22245958": {"denumire": "AQUA FLOW CONSTRUCT S.R.L.", "cif": "22245958"}}
-    company = anaf.get_company_from_anaf_with_fallback("22245958", cached=cached)
-    assert company == cached["22245958"]
+    cached = {"13390452": {"denumire": "NETPRO SRL", "cif": "13390452"}}
+    company = anaf.get_company_from_anaf_with_fallback("13390452", cached=cached)
+    assert company == cached["13390452"]
 
 
 def test_search_company_uses_cuifirma_only(mock_get):
     mock_get.return_value = mock.Mock(json=lambda: {
-        "results": [{"cui": 22245958, "name": "Aqua Flow Construct", "is_active": True}]})
-    results = anaf.search_company("Aqua Flow Construct")
+        "results": [{"cui": 13390452, "name": "Netpro", "is_active": True}]})
+    results = anaf.search_company("Netpro")
     assert mock_get.call_count == 1
     assert "cuifirma.ro" in mock_get.call_args.args[0]
-    assert results == [{"cui": "22245958", "name": "Aqua Flow Construct", "statusLabel": ""}]
+    assert results == [{"cui": "13390452", "name": "Netpro", "statusLabel": ""}]
 
 
 def test_search_anofm_parses_rows(mock_post):
     mock_post.return_value.status_code = 200
     mock_post.return_value.json.return_value = {"rows": [
         {"id": "1", "occupation": "Inginer", "address_locality_name": "Cluj > Cluj-Napoca"},
-        {"id": "2", "occupation": "Electrician", "address_locality_name": "Bistrita > Bistrita"},
+        {"id": "2", "occupation": "Electrician", "address_locality_name": "Oradea > Oradea"},
     ]}
-    jobs = anaf.search_anofm("22245958")
+    jobs = anaf.search_anofm("13390452")
     assert len(jobs) == 2
     assert jobs[0]["url"].endswith("/job/1")
     assert jobs[0]["title"] == "Inginer"
@@ -61,12 +61,12 @@ def test_search_anofm_parses_rows(mock_post):
 
 def test_search_anofm_empty_on_error(mock_post):
     mock_post.side_effect = Exception("network")
-    assert anaf.search_anofm("22245958") == []
+    assert anaf.search_anofm("13390452") == []
 
 
 def test_search_anofm_non_200(mock_post):
     mock_post.return_value.status_code = 500
-    assert anaf.search_anofm("22245958") == []
+    assert anaf.search_anofm("13390452") == []
 
 
 def test_validate_and_get_company_falls_back_to_config(monkeypatch, company_config):

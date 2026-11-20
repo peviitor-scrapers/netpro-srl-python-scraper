@@ -10,7 +10,7 @@ def test_main_checks_all_urls_and_deletes_only_own_prefix(monkeypatch):
         {"url": validate_jobs.BOARD_PREFIX + "ok"},
     ]
     monkeypatch.setattr(sys, "argv", [
-        "validate_jobs", "22245958", "--mode", "content", "--delete"])
+        "validate_jobs", "13390452", "--mode", "content", "--delete"])
     monkeypatch.setattr(validate_jobs, "query_solr",
                         lambda cif: {"numFound": len(docs), "docs": docs})
     monkeypatch.setattr(validate_jobs, "validate_by_content", lambda url: {

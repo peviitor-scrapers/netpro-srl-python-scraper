@@ -9,7 +9,7 @@ import scraper.api as api
 def test_query_solr_returns_docs(mock_get):
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"success": True, "total": 2, "data": [{"url": "u1"}]}
-    result = api.query_solr("22245958")
+    result = api.query_solr("13390452")
     assert result["numFound"] == 2
     assert result["docs"] == [{"url": "u1"}]
 
@@ -18,13 +18,13 @@ def test_query_solr_throws_on_http_error(mock_get):
     mock_get.return_value.status_code = 500
     mock_get.return_value.text = "boom"
     with pytest.raises(RuntimeError, match="500"):
-        api.query_solr("22245958")
+        api.query_solr("13390452")
 
 
 def test_query_solr_missing_data_returns_empty(mock_get):
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"success": False}
-    result = api.query_solr("22245958")
+    result = api.query_solr("13390452")
     assert result["numFound"] == 0
     assert result["docs"] == []
 
@@ -32,16 +32,16 @@ def test_query_solr_missing_data_returns_empty(mock_get):
 def test_upsert_jobs_keeps_cif(mock_post):
     mock_post.return_value.status_code = 200
     mock_post.return_value.json.return_value = {"success": True, "count": 1}
-    api.upsert_jobs([{"url": "u", "cif": "22245958"}])
+    api.upsert_jobs([{"url": "u", "cif": "13390452"}])
     sent = mock_post.call_args.kwargs["json"]
-    assert sent[0]["cif"] == "22245958"
+    assert sent[0]["cif"] == "13390452"
 
 
 def test_upsert_jobs_throws_on_http_error(mock_post):
     mock_post.return_value.status_code = 500
     mock_post.return_value.text = "boom"
     with pytest.raises(RuntimeError, match="500"):
-        api.upsert_jobs([{"url": "u", "cif": "22245958"}])
+        api.upsert_jobs([{"url": "u", "cif": "13390452"}])
 
 
 def test_delete_job_by_url(mock_delete):
@@ -66,16 +66,16 @@ def test_delete_job_by_url_throws_on_http_error(mock_delete):
 def test_upsert_company_keeps_id(mock_put):
     mock_put.return_value.status_code = 200
     mock_put.return_value.json.return_value = {"success": True}
-    api.upsert_company({"id": "22245958", "company": "AQUA FLOW CONSTRUCT S.R.L."})
+    api.upsert_company({"id": "13390452", "company": "NETPRO SRL"})
     sent = mock_put.call_args.kwargs["json"]
-    assert sent["id"] == "22245958"
+    assert sent["id"] == "13390452"
 
 
 def test_upsert_company_throws_on_http_error(mock_put):
     mock_put.return_value.status_code = 500
     mock_put.return_value.text = "boom"
     with pytest.raises(RuntimeError, match="500"):
-        api.upsert_company({"id": "22245958", "company": "AQUA FLOW CONSTRUCT S.R.L."})
+        api.upsert_company({"id": "13390452", "company": "NETPRO SRL"})
 
 
 def test_check_url_head(mock_head):
@@ -114,7 +114,7 @@ def test_run_verification_read_only_by_default(monkeypatch, capsys):
     delete_mock = mock.Mock()
     monkeypatch.setattr(api, "delete_job_by_url", delete_mock)
 
-    api.run_verification("22245958")
+    api.run_verification("13390452")
 
     delete_mock.assert_not_called()
     assert "nothing deleted" in capsys.readouterr().out
@@ -136,7 +136,7 @@ def test_run_verification_delete_scoped_to_prefix(monkeypatch):
     delete_mock = mock.Mock()
     monkeypatch.setattr(api, "delete_job_by_url", delete_mock)
 
-    api.run_verification("22245958", delete=True, prefix=BOARD)
+    api.run_verification("13390452", delete=True, prefix=BOARD)
 
     assert delete_mock.call_count == 1
     assert delete_mock.call_args.args[0] == BOARD + "dead1"
@@ -151,7 +151,7 @@ def test_run_verification_delete_requires_prefix(monkeypatch):
     delete_mock = mock.Mock()
     monkeypatch.setattr(api, "delete_job_by_url", delete_mock)
 
-    api.run_verification("22245958", delete=True, prefix=None)
+    api.run_verification("13390452", delete=True, prefix=None)
 
     delete_mock.assert_not_called()
 
@@ -165,7 +165,7 @@ def test_run_verification_delete_passes_only_url(monkeypatch):
     monkeypatch.setattr(api, "check_url", lambda url: {"url": url, "status": 404, "valid": False})
     monkeypatch.setattr(api, "delete_job_by_url", lambda url: deleted.append(url))
 
-    api.run_verification("22245958", delete=True, prefix=BOARD)
+    api.run_verification("13390452", delete=True, prefix=BOARD)
 
     assert deleted == [BOARD + "dead1"]
 
@@ -176,7 +176,7 @@ def test_query_solr_retries_transient_failure(monkeypatch, mock_get):
         mock.Mock(status_code=500, text="boom"),
         mock.Mock(status_code=200, json=lambda: {"success": True, "total": 1, "data": [{"url": "u"}]}),
     ]
-    result = api.query_solr("22245958")
+    result = api.query_solr("13390452")
     assert result["numFound"] == 1
     assert mock_get.call_count == 2
 

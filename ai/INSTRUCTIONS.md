@@ -2,14 +2,14 @@
 
 ## Project Purpose
 
-This scraper extracts job listings for **AQUA FLOW CONSTRUCT S.R.L.** (CIF `22245958`)
+This scraper extracts job listings for **NETPRO SRL** (CIF `13390452`)
 from **ANOFM** (`https://mediere.anofm.ro`) and publishes them to
 peviitor.ro via the v1 API (`https://api.peviitor.ro/v1`).
 
 The company has no own careers board, so ANOFM is the only job source.
 
 Target: `https://mediere.anofm.ro/api/entity/vw_public_job_posting`
-(POST, filtered by `employer_tax_code=22245958`).
+(POST, filtered by `employer_tax_code=13390452`).
 
 ## Model Schemas
 
@@ -49,7 +49,7 @@ When working on this scraper:
 
 ## Workflow Steps
 
-1. **Start with brand** — `Aqua Flow Construct`
+1. **Start with brand** — `Netpro`
 2. **Search in CUIFirma** — resolve the brand to a CIF
 3. **Get company details from CUIScan** — fetch the legal name and address by CIF
 4. **Validate with Peviitor** — verify company exists in peviitor
@@ -70,7 +70,7 @@ When working on this scraper:
 python3 -m scraper.index
 
 # Get company details from CUIScan by CIF
-python3 -c "from scraper.anaf import get_company_from_anaf; print(get_company_from_anaf('22245958'))"
+python3 -c "from scraper.anaf import get_company_from_anaf; print(get_company_from_anaf('13390452'))"
 ```
 
 > **Important**: Stale deletion is scoped to the ANOFM job URL prefix
@@ -191,12 +191,12 @@ python3 -m scraper.index
 # Query jobs in peviitor by CIF (read-only verify; add --delete to remove
 # invalid ANOFM URLs — deletion is scoped to the ANOFM job prefix, so jobs
 # from other scrapers under a shared CIF are never touched)
-python3 -m scraper.api 22245958
+python3 -m scraper.api 13390452
 
 # Validate job URLs from peviitor by CIF (head/content/browser)
-python3 -m scraper.validate_jobs 22245958 --mode head
-python3 -m scraper.validate_jobs 22245958 --mode content --dry-run
-python3 -m scraper.validate_jobs 22245958 --mode content --delete
+python3 -m scraper.validate_jobs 13390452 --mode head
+python3 -m scraper.validate_jobs 13390452 --mode content --dry-run
+python3 -m scraper.validate_jobs 13390452 --mode content --delete
 ```
 
 ## Testing

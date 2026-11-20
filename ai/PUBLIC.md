@@ -12,14 +12,14 @@ All scrapers derived from the template **MUST** be **PUBLIC** repositories.
 
 Keep the repository public. The repo is public and hosted at:
 
-- Repository: https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper
-- GitHub Pages: https://peviitor-scrapers.github.io/aqua-flow-construct-python-scraper/ (`docs/` on `main`, built automatically)
-- Scraper workflow: https://github.com/peviitor-scrapers/aqua-flow-construct-python-scraper/actions/workflows/job-seeker-ro-spider.yml
+- Repository: https://github.com/peviitor-scrapers/netpro-srl-python-scraper
+- GitHub Pages: https://peviitor-scrapers.github.io/netpro-srl-python-scraper/ (`docs/` on `main`, built automatically)
+- Scraper workflow: https://github.com/peviitor-scrapers/netpro-srl-python-scraper/actions/workflows/job-seeker-ro-spider.yml
 - Jobs page: `docs/jobs.md` (generated, committed, served on GitHub Pages)
-- Peviitor search: https://peviitor.ro (CIF `22245958`)
+- Peviitor search: https://peviitor.ro (CIF `13390452`)
 
 ## How to check
 
 ```bash
-gh repo view peviitor-scrapers/aqua-flow-construct-python-scraper --json visibility
+gh repo view peviitor-scrapers/netpro-srl-python-scraper --json visibility
 ```

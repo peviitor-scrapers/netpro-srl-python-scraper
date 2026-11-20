@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Enriched non-personal fields: location, salary, date and expiry date (#1).
 
 ### Changed
-- Company identity set to AQUA FLOW CONSTRUCT S.R.L. (CUI `22245958`); config, docs
+- Company identity set to NETPRO SRL (CUI `13390452`); config, docs
   and test fixtures rebranded (#1).
 - Source identifier is now `mediere.anofm.ro, jobrapid.ro, bebee.com,
   jobica.ro, emprego.com, cauta.ro, jobradar24.ro` (#1).
@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [1.0.0] - 2026-11-19
 
 ### Added
-- Python scraper for **AQUA FLOW CONSTRUCT S.R.L.** (CUI `22245958`), reading jobs
+- Python scraper for **NETPRO SRL** (CUI `13390452`), reading jobs
   from ANOFM (`mediere.anofm.ro`) and five other portals.
 - Publisher to peviitor v1 API: company upsert, job upload, stale-job delete.
 - ANAF company validation with CUIScan fallback and cache.

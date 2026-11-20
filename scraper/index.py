@@ -1,10 +1,9 @@
 """
-AQUA FLOW CONSTRUCT S.R.L. multi-source scraper
+NETPRO SRL multi-source scraper
 
-Collects job postings published by OZALTIN INSAAT TICARET VE SANAYI ANONIM
-SIRKETI ANKARA SUCURSALA BUCURESTI (CUI 22245958) on ANOFM, jobRapid, BeBee,
-Jobica, Emprego and Jobstogo, then publishes them to peviitor.ro via the v1
-API. Postings with distinct URLs are distinct jobs.
+Collects job postings published by NETPRO SRL (CUI 13390452) on ANOFM,
+jobRapid, BeBee, Jobica, Emprego and JobRadar24, then publishes them to
+peviitor.ro via the v1 API. Postings with distinct URLs are distinct jobs.
 """
 
 import datetime
@@ -14,7 +13,7 @@ import pathlib
 import re
 import sys
 import unicodedata
-from urllib.parse import urljoin
+from urllib.parse import quote, urljoin
 
 import requests
 
@@ -62,17 +61,13 @@ MIRROR_TIMEOUT = 15
 BEBEE_JOB_URL = "https://bebee.com/ro/jobs/{slug}--techmap_ro_{id}"
 JOBICA_JOB_URL = "https://jobica.ro/job/{slug}-anofm-{id}"
 EMPREGO_BASE_URL = "https://emprego.com"
-EMPREGO_COMPANY_URL = f"{EMPREGO_BASE_URL}/jobs?q=AQUA%20FLOW%20CONSTRUCT"
+EMPREGO_COMPANY_URL = f"{EMPREGO_BASE_URL}/jobs?q={quote(scraper_config['empregoQuery'])}"
 EMPREGO_JOB_HREF_RE = re.compile(r'href=["\'](/jobs/[^"\']+)["\']', re.I)
 CAUTA_BASE_URL = "https://cauta.ro"
-CAUTA_COMPANY_URL = f"{CAUTA_BASE_URL}/firme/22245958-aqua-flow-construct-srl"
+CAUTA_COMPANY_URL = f"{CAUTA_BASE_URL}/firme/{scraper_config['cautaCompanySlug']}"
 CAUTA_JOB_HREF_RE = re.compile(r'href=["\'](/locuri-de-munca/anunt/[^"\']+)["\']', re.I)
-JOBRADAR24_JOB_URLS = (
-    "https://www.jobradar24.ro/anunt/muncitor-necalificat-la-demolarea-cladirilor-captuseli-zidarie-placi-mozaic-faianta-gresie-parchet-er89qk",
-)
-JOBRADAR24_CITY = "Bistrita"
-MIRROR_COMPANY_SLUG = "aqua-flow-construct-srl"
-MIRROR_CITY_SLUG = "tiha-bargaului"
+JOBRADAR24_JOB_URLS = tuple(scraper_config.get("jobradar24JobUrls") or ())
+JOBRADAR24_CITY = (company_config.get("location") or ["România"])[0]
 JOB_PREFIXES = (
     JOB_DETAILS_PREFIX,
     JOBRAPID_JOB_PREFIX,
@@ -104,6 +99,10 @@ def _slug(value):
     value = "".join(c for c in unicodedata.normalize("NFD", value) if unicodedata.category(c) != "Mn")
     value = value.lower().replace("&", " si ")
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", value)).strip("-")
+
+
+MIRROR_COMPANY_SLUG = _slug(company_config["company"])
+MIRROR_CITY_SLUG = _slug(JOBRADAR24_CITY)
 
 
 def _city(row):
@@ -622,7 +621,7 @@ def main(root=None):
     global COMPANY_NAME
     COMPANY_NAME = validated["company"]
 
-    print("=== Step 3: Scrape AQUA FLOW CONSTRUCT S.R.L. jobs from all sources ===")
+    print(f"=== Step 3: Scrape {validated['company']} jobs from all sources ===")
     raw_jobs = []
     known_urls = set()
     anofm_jobs = search_anofm_jobs(_anofm_cif(validated["cif"]))

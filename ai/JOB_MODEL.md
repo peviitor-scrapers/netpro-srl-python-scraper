@@ -46,9 +46,9 @@ This scraper does not set `workmode`; ANOFM postings do not expose it.
 {
   "url": "https://mediere.anofm.ro/app/module/mediere/job/123456",
   "title": "Lucrător comercial",
-  "company": "AQUA FLOW CONSTRUCT S.R.L.",
-  "cif": "22245958",
-  "location": ["Bistrita"],
+  "company": "NETPRO SRL",
+  "cif": "13390452",
+  "location": ["Oradea"],
   "date": "2026-11-19T00:00:00Z",
   "status": "scraped"
 }
