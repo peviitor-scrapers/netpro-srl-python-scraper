@@ -135,6 +135,7 @@ def get_company_from_anaf(cif):
         "cif": str(data.get("cui") or cif),
         "denumire": str(data.get("denumire")).strip(),
         "adresa": data.get("adresa"),
+        "judet": data.get("judet"),
         "nrRegCom": data.get("nrRegCom"),
         "codCaen": str(data.get("codCaen") or ""),
         "dataInregistrare": data.get("dataInregistrare"),

@@ -594,6 +594,23 @@ def drop_dead_urls(jobs):
     return alive
 
 
+def _company_location(validated):
+    """Company location (Judet) must contain only the county, not the full address.
+
+    CUIScan exposes a dedicated ``judet`` field; older cache entries may not,
+    so fall back to the ``JUD. <county>, ...`` prefix of the address and finally
+    to the configured city.
+    """
+    judet = str(validated.get("judet") or "").strip()
+    if judet:
+        return [judet]
+    address = str(validated.get("address") or "").strip()
+    match = re.match(r"JUD\.?\s+([^,]+)", address, re.IGNORECASE)
+    if match:
+        return [match.group(1).strip()]
+    return list(company_config.get("location") or ["România"])
+
+
 def _validated_company():
     try:
         return validate_and_get_company()
@@ -603,6 +620,7 @@ def _validated_company():
             "cif": company_config["id"],
             "company": company_config["company"],
             "address": (company_config.get("location") or ["România"])[0],
+            "judet": None,
         }
 
 
@@ -658,7 +676,7 @@ def main(root=None):
             "company": validated["company"],
             "brand": company_config.get("brand"),
             "status": company_config.get("status") or "activ",
-            "location": [validated["address"]] if validated.get("address") else company_config["location"],
+            "location": _company_location(validated),
             "website": company_config.get("website"),
             "career": company_config.get("career"),
             "scraperFile": company_config.get("scraperFile"),

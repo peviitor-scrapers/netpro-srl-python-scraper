@@ -29,6 +29,7 @@ def validate_and_get_company(cif=None, cached=None):
             "cif": cif,
             "denumire": company_config["company"],
             "adresa": ", ".join(company_config.get("location") or []),
+            "judet": None,
         }
 
     company_name = company.get("denumire")
@@ -39,4 +40,5 @@ def validate_and_get_company(cif=None, cached=None):
         "company": company_name,
         "cif": str(cif),
         "address": company.get("adresa") or None,
+        "judet": company.get("judet") or None,
     }

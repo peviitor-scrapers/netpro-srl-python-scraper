@@ -62,13 +62,31 @@ def test_transform_jobs_for_solr_missing_location_fallback():
     assert transformed["jobs"][0]["location"] == ["România"]
 
 
-def _stub_main(monkeypatch, tmp_path, raw_jobs):
+def test_company_location_uses_county_from_provider():
+    validated = {
+        "address": "JUD. BIHOR, MUN. ORADEA, STR. ALEXANDRU D. XENOPOL, NR.1, BL.D73, AP.9",
+        "judet": "BIHOR",
+    }
+    assert index._company_location(validated) == ["BIHOR"]
+
+
+def test_company_location_falls_back_to_address_prefix():
+    validated = {"address": "JUD. BIHOR, MUN. ORADEA, STR. X"}
+    assert index._company_location(validated) == ["BIHOR"]
+
+
+def test_company_location_falls_back_to_config():
+    assert index._company_location({"address": "ORADEA"}) == ["Oradea"]
+
+
+def _stub_main(monkeypatch, tmp_path, raw_jobs, company_sink=None, validated=None):
     monkeypatch.setattr(index, "query_solr", lambda cif: {"numFound": 0, "docs": []})
     monkeypatch.setattr(index, "upsert_jobs", lambda jobs: None)
     monkeypatch.setattr(index, "delete_job_by_url", lambda url: None)
-    monkeypatch.setattr(index, "upsert_company", lambda cfg: None)
-    monkeypatch.setattr(index, "validate_and_get_company", lambda: {
-        "company": "NETPRO SRL", "cif": "13390452", "address": "ORADEA"})
+    monkeypatch.setattr(index, "upsert_company",
+                        lambda cfg: company_sink.update(cfg) if company_sink is not None else None)
+    monkeypatch.setattr(index, "validate_and_get_company", lambda: validated or {
+        "company": "NETPRO SRL", "cif": "13390452", "address": "ORADEA", "judet": None})
     monkeypatch.setattr(index, "search_anofm_jobs", lambda cif: raw_jobs)
     monkeypatch.setattr(index, "search_jobrapid", lambda company: [])
     monkeypatch.setattr(index, "search_jsonld_mirrors", lambda jobs, company: [])
@@ -94,6 +112,22 @@ def test_main_writes_summary(tmp_path, monkeypatch):
     assert len(data["jobs"]) == 3
     assert data["company"] == "NETPRO SRL"
     assert (tmp_path / "docs" / "jobs.md").exists()
+
+
+def test_main_publishes_only_county_in_company_location(tmp_path, monkeypatch):
+    fake_jobs = [{
+        "url": "https://mediere.anofm.ro/app/module/mediere/job/1",
+        "title": "Job", "location": ["Oradea"],
+    }]
+    published = {}
+    root = _stub_main(monkeypatch, tmp_path, fake_jobs, company_sink=published, validated={
+        "company": "NETPRO SRL", "cif": "13390452", "judet": "BIHOR",
+        "address": "JUD. BIHOR, MUN. ORADEA, STR. ALEXANDRU D. XENOPOL, NR.1, BL.D73, AP.9",
+    })
+
+    index.main(root=root)
+
+    assert published["location"] == ["BIHOR"]
 
 
 def test_main_preserves_enriched_fields(tmp_path, monkeypatch):

@@ -10,12 +10,14 @@ from scraper import anaf
 def test_get_company_from_anaf_cuiscan_only(mock_get):
     mock_get.return_value = mock.Mock(json=lambda: {
         "denumire": "NETPRO SRL", "cui": "13390452",
-        "adresa": "CLUJ-NAPOCA", "activ": True})
+        "adresa": "JUD. BIHOR, MUN. ORADEA, STR. ALEXANDRU D. XENOPOL, NR.1",
+        "judet": "BIHOR", "activ": True})
     company = anaf.get_company_from_anaf("13390452")
     assert mock_get.call_count == 1
     assert "cuiscan.ro" in mock_get.call_args.args[0]
     assert company["denumire"] == "NETPRO SRL"
     assert company["cif"] == "13390452"
+    assert company["judet"] == "BIHOR"
     assert "stareInregistrare" not in company
 
 
