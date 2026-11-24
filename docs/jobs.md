@@ -7,7 +7,7 @@
 | CIF | 13390452 |
 | Brand | Netpro |
 | Career | https://mediere.anofm.ro/app/module/mediere/jobs |
-| LastScraped | 2026-11-23 |
+| LastScraped | 2026-11-24 |
 
 ## Jobs (12)
 
@@ -96,4 +96,4 @@
 - **Status**: scraped
 
 ---
-_Generated at 2026-11-23T16:59:56Z_
+_Generated at 2026-11-24T16:47:28Z_
