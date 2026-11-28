@@ -7,9 +7,9 @@
 | CIF | 13390452 |
 | Brand | Netpro |
 | Career | https://mediere.anofm.ro/app/module/mediere/jobs |
-| LastScraped | 2026-11-27 |
+| LastScraped | 2026-11-28 |
 
-## Jobs (9)
+## Jobs (12)
 
 ### TEHNICIAN DEVIZIER
 
@@ -33,6 +33,24 @@
 - **Location**: MUNICIPIUL ORADEA
 - **Work Mode**: on-site
 - **Tags**: specialisti-tehnicieni, absolventi, cu-norma-intreaga, cu-durata-nedeterminata, sediu, universitar-invatamant-superior, experienta-medie-intre-3-si-5-ani
+- **Status**: scraped
+
+### Tehnician Devizier
+
+- **URL**: [https://www.jobrapid.ro/locuri-de-munca/tehnician-devizier-in-oradea-1662650.html](https://www.jobrapid.ro/locuri-de-munca/tehnician-devizier-in-oradea-1662650.html)
+- **Location**: Oradea
+- **Status**: scraped
+
+### Muncitor Necalificat La Demolarea Cladirilor, Captuseli Zidarie, Placi Mozaic, Faianta, Gresie, Parchet
+
+- **URL**: [https://www.jobrapid.ro/locuri-de-munca/muncitor-necalificat-la-demolarea-cladirilor-captuseli-zidarie-placi-mozaic-faianta-gresie-parchet-in-oradea-1254440.html](https://www.jobrapid.ro/locuri-de-munca/muncitor-necalificat-la-demolarea-cladirilor-captuseli-zidarie-placi-mozaic-faianta-gresie-parchet-in-oradea-1254440.html)
+- **Location**: Oradea
+- **Status**: scraped
+
+### Specialist In Achizitii
+
+- **URL**: [https://www.jobrapid.ro/locuri-de-munca/specialist-in-achizitii-in-oradea-1453831.html](https://www.jobrapid.ro/locuri-de-munca/specialist-in-achizitii-in-oradea-1453831.html)
+- **Location**: Oradea
 - **Status**: scraped
 
 ### Tehnician devizier
@@ -78,4 +96,4 @@
 - **Status**: scraped
 
 ---
-_Generated at 2026-11-27T15:55:20Z_
+_Generated at 2026-11-28T14:51:12Z_
